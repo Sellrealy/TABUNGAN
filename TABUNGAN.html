@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tabungan Lucu - Cute Savings Tracker</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Poppins:wght@400;600&display=swap');
+
+    :root {
+      --color-primary: #ff6584;
+      --color-primary-light: #ffe1e7;
+      --color-secondary: #6a9cfb;
+      --color-secondary-light: #d4e2ff;
+      --color-bg: #fff8fb;
+      --color-text-primary: #3c2c42;
+      --color-text-secondary: #6e5e82;
+      --color-card-bg: #ffffff;
+      --color-success: #58d68d;
+      --color-error: #e74c3c;
+      --radius: 1rem;
+      --shadow-light: 0 4px 8px rgba(102, 57, 84, 0.1);
+      --font-heading: 'Comic Neue', cursive;
+      --font-body: 'Poppins', sans-serif;
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Reset */
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--color-bg);
+      font-family: var(--font-body);
+      color: var(--color-text-primary);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem 4rem;
+    }
+
+    h1 {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 3rem;
+      color: var(--color-primary);
+      margin-bottom: 0.25rem;
+      text-align: center;
+      user-select: none;
+      text-shadow: 1px 1px 2px rgba(255 101 132 / 0.3);
+    }
+
+    h2 {
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      font-size: 1.25rem;
+      margin-top: 0;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .container {
+      max-width: 400px;
+      width: 100%;
+      background: var(--color-card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-light);
+      padding: 2rem 2.5rem 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      user-select: none;
+    }
+
+    label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--color-text-secondary);
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      border-radius: var(--radius);
+      border: 2px solid var(--color-primary-light);
+      background: var(--color-primary-light);
+      color: var(--color-text-primary);
+      font-weight: 600;
+      transition: border-color var(--transition);
+      outline-offset: 2px;
+    }
+    input[type="number"]:focus {
+      border-color: var(--color-primary);
+      background: #fff;
+    }
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    button {
+      margin-top: 1rem;
+      background: var(--color-primary);
+      color: white;
+      font-weight: 700;
+      font-size: 1.15rem;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      padding: 0.75rem 1.5rem;
+      box-shadow: 0 8px 15px rgba(255 101 132 / 0.3);
+      transition: transform var(--transition), box-shadow var(--transition);
+      user-select: none;
+    }
+    button:hover {
+      box-shadow: 0 14px 20px rgba(255 101 132 / 0.45);
+      transform: scale(1.05);
+    }
+    button:active {
+      transform: scale(0.98);
+      box-shadow: 0 4px 10px rgba(255 101 132 / 0.25);
+    }
+
+    .balance {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--color-secondary);
+      text-align: center;
+      margin-top: 0.5rem;
+      user-select: text;
+    }
+
+    .transaction-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-height: 180px;
+      overflow-y: auto;
+      border-radius: var(--radius);
+      background: var(--color-primary-light);
+      box-shadow: inset 0 0 6px rgba(255 101 132 / 0.1);
+    }
+    .transaction-list li {
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid rgba(255 101 132 / 0.15);
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.95rem;
+      color: var(--color-text-primary);
+    }
+    .transaction-list li:last-child {
+      border-bottom: none;
+    }
+
+    .transaction-list li.deposit {
+      color: var(--color-success);
+    }
+
+    .transaction-list li.empty {
+      text-align: center;
+      color: var(--color-text-secondary);
+      font-style: italic;
+      font-weight: 400;
+      padding: 1rem;
+      user-select: none;
+    }
+
+    /* Footer with credits */
+    footer {
+      margin-top: 3rem;
+      font-size: 0.8rem;
+      color: var(--color-text-secondary);
+      font-style: italic;
+      user-select: none;
+      text-align: center;
+    }
+
+  </style>
+</head>
+<body>
+  <h1>Tabungan Lily 💸</h1>
+  <h2>✨Ayo Menabung!</h2>
+  <main class="container" role="main" aria-label="Aplikasi tabungan lucu">
+    <form id="depositForm" aria-label="Form tambah tabungan">
+      <label for="amount">Jumlah tabungan (Rp):</label>
+      <input type="number" id="amount" name="amount" min="1" placeholder="Masukkan jumlah..." required autocomplete="off" aria-required="true" />
+      <button type="submit" aria-label="Tambah tabungan">Tambah Tabungan</button>
+    </form>
+
+    <section aria-live="polite" aria-atomic="true">
+      <p>Saldo saat ini:</p>
+      <p class="balance" id="balance">Rp 0</p>
+    </section>
+
+    <section aria-label="Daftar transaksi">
+      <h3 style="font-family:var(--font-heading); color:var(--color-primary); margin-bottom:0.75rem; user-select:none;">Riwayat Tabungan</h3>
+      <ul class="transaction-list" id="transactionList" aria-live="polite" aria-relevant="additions removals">
+        <li class="empty">Belum ada transaksi</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2025 Tabungan Lily - Dibuat Oleh Sely 🎀 
+  </footer>
+
+  <script>
+    (() => {
+      const form = document.getElementById('depositForm');
+      const amountInput = document.getElementById('amount');
+      const balanceElem = document.getElementById('balance');
+      const transactionList = document.getElementById('transactionList');
+
+      let balance = 0;
+      let transactions = [];
+
+      // Format number to Indonesian Rupiah string
+      function formatRupiah(number) {
+        return new Intl.NumberFormat('id-ID', {
+          style: 'currency',
+          currency: 'IDR',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0
+        }).format(number);
+      }
+
+      function renderBalance() {
+        balanceElem.textContent = formatRupiah(balance);
+      }
+
+      function renderTransactions() {
+        transactionList.innerHTML = '';
+        if (transactions.length === 0) {
+          const li = document.createElement('li');
+          li.textContent = 'Belum ada transaksi';
+          li.classList.add('empty');
+          transactionList.appendChild(li);
+          return;
+        }
+        transactions.slice().reverse().forEach(tx => {
+          const li = document.createElement('li');
+          li.classList.add('deposit');
+          li.textContent = formatRupiah(tx.amount);
+          const timeSpan = document.createElement('span');
+          timeSpan.style.opacity = '0.6';
+          timeSpan.style.fontSize = '0.75rem';
+          timeSpan.textContent = new Date(tx.timestamp).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+          li.appendChild(timeSpan);
+          transactionList.appendChild(li);
+        });
+      }
+
+      function addTransaction(amount) {
+        if (amount <= 0 || isNaN(amount)) return false;
+        balance += amount;
+        transactions.push({
+          amount,
+          timestamp: Date.now()
+        });
+        renderBalance();
+        renderTransactions();
+        return true;
+      }
+
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        const amount = parseInt(amountInput.value, 10);
+        if (isNaN(amount) || amount < 1) {
+          alert('Masukkan jumlah tabungan yang valid (minimal Rp1)');
+          amountInput.focus();
+          return;
+        }
+        if (addTransaction(amount)) {
+          amountInput.value = '';
+          amountInput.focus();
+        }
+      });
+
+      // Initial render
+      renderBalance();
+      renderTransactions();
+    })();
+  </script>
+</body>
+</html>
+
